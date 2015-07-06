@@ -1,6 +1,6 @@
 {
   "name": "typescript-json-check",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Micro lib for verify JSON-object and cast it to custom type by decorator in TypeScript",
   "main": "lib.js",
   "scripts": {

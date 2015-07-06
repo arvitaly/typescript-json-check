@@ -31,9 +31,7 @@ export class Model {
 
             switch (propInfo.type) {
                 case IPropType.Class:
-                    console.log(1);
                     this[propName] = eval('new propInfo.class(data[propName]);');
-                    console.log(this[propName]);
                     break;
                 case IPropType.Array:
                     this[propName] = data[propName];

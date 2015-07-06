@@ -1,4 +1,5 @@
 ﻿import {Model as Model, prop as prop, IPropType as IPropType} from './lib';
+
 class X extends Model {
     @prop({ type: IPropType.Array, arrayProp: { type: IPropType.Number } })
     a;
