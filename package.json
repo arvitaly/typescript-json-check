@@ -1,10 +1,10 @@
 {
   "name": "typescript-json-check",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "Micro lib for verify JSON-object and cast it to custom type by decorator in TypeScript",
   "main": "lib.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test && exit 0"
   },
   "repository": {
     "type": "git",

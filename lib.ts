@@ -1,12 +1,12 @@
 ﻿export interface IProp {
-    type: IPropType;
+    type: PropType;
     optional?: boolean;
     class?;
     params?;
     isCasting?: boolean;
     arrayProp?: IProp;
 }
-export enum IPropType {
+export enum PropType {
     String,
     Number,
     Object,
@@ -18,6 +18,9 @@ export enum IPropType {
 export class Model {
     __props: { [index: string]: IProp };
     constructor(data?: any) {
+        if (this.isPlainObject(data)) {
+            throw new Error('Data is not plain object');
+        }
         for (var propName in this.__props) {
             var propInfo = this.__props[propName];
             if ((typeof (propInfo.optional) === 'undefined' || propInfo.optional === true) && typeof (data[propName]) === 'undefined') {
@@ -31,20 +34,20 @@ export class Model {
             }
 
             switch (propInfo.type) {
-                case IPropType.Object:
+                case PropType.Object:
                     if (!propInfo.class) {
                         propInfo.class = Object;
                     }
                     this[propName] = eval('new propInfo.class(data[propName]);');
                     break;
-                case IPropType.Enum:
+                case PropType.Enum:
                     if (!propInfo.class) {
                         this[propName] = data[propName];
                     } else {
                         this[propName] = propInfo.class[data[propName]];
                     }
                     break;
-                case IPropType.Array:
+                case PropType.Array:
                     this[propName] = data[propName];
                     break;
                 default:
@@ -55,7 +58,7 @@ export class Model {
     }
     check(value, propInfo: IProp) {
         switch (propInfo.type) {
-            case IPropType.Enum:
+            case PropType.Enum:
                 if (!/^[A-z]/gi.test(value)) {
                     return false;
                 }
@@ -64,12 +67,12 @@ export class Model {
                 } else {
                     return typeof (propInfo.class[value]) !== 'undefined';
                 }
-            case IPropType.String:
+            case PropType.String:
                 if (!(typeof value === 'string' || value instanceof String)) {
                     return false;
                 }
                 return true;
-            case IPropType.Array:
+            case PropType.Array:
                 if (!(typeof value === 'array' || value instanceof Array)) {
                     return false;
                 }
@@ -83,7 +86,7 @@ export class Model {
                     }
                 }
                 return true;
-            case IPropType.Number:
+            case PropType.Number:
                 if (!(typeof value === 'number' || value instanceof Number)) {
                     if (!propInfo.isCasting) {
                         return false;
@@ -91,9 +94,9 @@ export class Model {
                     return !isNaN(value);
                 }
                 return true;
-            case IPropType.Object:
+            case PropType.Object:
                 return this.isPlainObject(value);
-            case IPropType.Boolean:
+            case PropType.Boolean:
                 if (!(typeof value === 'boolean' || value instanceof Boolean)) {
                     if (!propInfo.isCasting) {
                         return false;
@@ -101,7 +104,7 @@ export class Model {
                     return true;
                 }
                 return true;
-            case IPropType.Any:
+            case PropType.Any:
                 return true;
             default:
                 throw new Error('Unknown type');

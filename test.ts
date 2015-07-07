@@ -1,7 +1,7 @@
-﻿import {Model as Model, prop as prop, IPropType as IPropType} from './lib';
+﻿import {Model as Model, prop as prop, PropType as PropType} from './lib';
 
 class X extends Model {
-    @prop({ type: IPropType.Array, arrayProp: { type: IPropType.Number } })
+    @prop({ type: PropType.Array, arrayProp: { type: PropType.Number } })
     a;
 }
 enum Enum1 {
@@ -10,16 +10,28 @@ enum Enum1 {
     V3
 }
 class MyClass extends Model {
-    @prop({ type: IPropType.Object, class: X })
+    @prop({ type: PropType.Object, class: X })
     prop1;
-
-    @prop({ type: IPropType.Enum, class: Enum1 })
+    @prop({ type: PropType.String })
+    propString;
+    @prop({ type: PropType.Enum, class: Enum1 })
     b: Enum1;
 }
 
-var a = new MyClass({ prop1: { a: [1, 2, 3] }, b: "V1" });
+class TestString extends Model {
+    @prop({ type: PropType.String })
+    prop: string;
+}
+
+var a = new MyClass({ propString: "afaf", prop1: { a: [1, 2, 3] }, b: "V1" });
 console.assert(a.prop1 instanceof X);
-console.assert(a.b == Enum1.V1, "Invalid JSON");
+console.assert(a.b === Enum1.V1, "Invalid JSON");
+console.assert(a.propString === "afaf");
+try {
+    new TestString({ prop: 123 });
+    console.assert(false, "Not check string field");
+} catch (e) {
+}
 try {
     new MyClass({});
     console.assert(false, "Not check required field");
