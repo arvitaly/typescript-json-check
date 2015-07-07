@@ -1,5 +1,4 @@
 .npmignore
-.gitignore
 lib.js
 test.js
 npm-debug.log

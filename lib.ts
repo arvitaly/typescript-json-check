@@ -93,7 +93,7 @@ export class Model {
                     }
                     return !isNaN(value);
                 }
-                return true;
+                return true; 
             case PropType.Object:
                 return this.isPlainObject(value);
             case PropType.Boolean:

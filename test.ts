@@ -7,7 +7,7 @@ class X extends Model {
 enum Enum1 {
     V1,
     V2,
-    V3
+    V3 
 }
 class MyClass extends Model {
     @prop({ type: PropType.Object, class: X })
