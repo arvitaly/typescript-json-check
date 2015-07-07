@@ -38,3 +38,17 @@ try {
 } catch (e) {
 
 }
+
+class B extends Model {
+    @prop({ type: PropType.String })
+    ap2;
+}
+class A extends B {
+    @prop({ type: PropType.String })
+    ap1;
+}
+try {
+    var c = new B({ ap2: "daf", ap1: "df", t: "dfs" });
+    console.assert(false, "Not throw unknown properties");
+} catch (e) {
+}

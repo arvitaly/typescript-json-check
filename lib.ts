@@ -32,7 +32,6 @@ export class Model {
             if (!this.check(data[propName], propInfo)) {
                 throw new Error('Invalid type for property ' + propName);
             }
-
             switch (propInfo.type) {
                 case PropType.Object:
                     if (!propInfo.class) {
@@ -54,6 +53,11 @@ export class Model {
                     this[propName] = data[propName];
                     break;
             }
+            delete data[propName];
+        }
+        var props = Object.keys(data);
+        if (props.length > 0) {
+            throw new Error('Unknown properties ' + props);
         }
     }
     check(value, propInfo: IProp) {
