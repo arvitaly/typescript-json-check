@@ -51,4 +51,6 @@ try {
     var c = new B({ ap2: "daf", ap1: "df", t: "dfs" });
     console.assert(false, "Not throw unknown properties");
 } catch (e) {
+    
 }
+var c = new B({ ap2: "daf", ap1: "df", t: "dfs" }, { allowUnknownProps: true });

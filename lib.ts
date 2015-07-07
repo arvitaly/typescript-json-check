@@ -15,9 +15,12 @@ export enum PropType {
     Any,
     Enum
 }
+export interface IModelOptions {
+    allowUnknownProps: boolean;
+}
 export class Model {
     __props: { [index: string]: IProp };
-    constructor(data?: any) {        
+    constructor(data: any, options?:IModelOptions) {
         if (!this.isPlainObject(data)) {
             throw new Error('Data is not plain object');
         }
@@ -56,7 +59,7 @@ export class Model {
             delete data[propName];
         }
         var props = Object.keys(data);
-        if (props.length > 0) {
+        if (props.length > 0 && (!options || options.allowUnknownProps === false) ) {
             throw new Error('Unknown properties ' + props);
         }
     }
