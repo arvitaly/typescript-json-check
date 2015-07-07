@@ -1,7 +1,7 @@
 ﻿export interface IProp {
     type: IPropType;
     optional?: boolean;
-    class?: Function;
+    class?;
     params?;
     isCasting?: boolean;
     arrayProp?: IProp;
@@ -9,10 +9,11 @@
 export enum IPropType {
     String,
     Number,
-    Class,
+    Object,
     Array,
     Boolean,
-    Any
+    Any,
+    Enum
 }
 export class Model {
     __props: { [index: string]: IProp };
@@ -30,8 +31,18 @@ export class Model {
             }
 
             switch (propInfo.type) {
-                case IPropType.Class:
+                case IPropType.Object:
+                    if (!propInfo.class) {
+                        propInfo.class = Object;
+                    }
                     this[propName] = eval('new propInfo.class(data[propName]);');
+                    break;
+                case IPropType.Enum:
+                    if (!propInfo.class) {
+                        this[propName] = data[propName];
+                    } else {
+                        this[propName] = propInfo.class[data[propName]];
+                    }
                     break;
                 case IPropType.Array:
                     this[propName] = data[propName];
@@ -44,6 +55,15 @@ export class Model {
     }
     check(value, propInfo: IProp) {
         switch (propInfo.type) {
+            case IPropType.Enum:
+                if (!/^[A-z]/gi.test(value)) {
+                    return false;
+                }
+                if (!propInfo.class) {
+                    return true;
+                } else {
+                    return typeof (propInfo.class[value]) !== 'undefined';
+                }
             case IPropType.String:
                 if (!(typeof value === 'string' || value instanceof String)) {
                     return false;
@@ -71,7 +91,7 @@ export class Model {
                     return !isNaN(value);
                 }
                 return true;
-            case IPropType.Class:
+            case IPropType.Object:
                 return this.isPlainObject(value);
             case IPropType.Boolean:
                 if (!(typeof value === 'boolean' || value instanceof Boolean)) {
