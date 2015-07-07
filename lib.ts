@@ -134,7 +134,8 @@ export class Model {
 }
 export function prop(info: IProp) {
     return (target: Object, propertyKey: string) => {
-        target['__props'] = target['__props'] || {};
+        
+        target['__props'] = target.hasOwnProperty('__props') ? target['__props'] : {};
         target['__props'][propertyKey] = info;
     }
 }
