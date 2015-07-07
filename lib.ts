@@ -17,8 +17,8 @@ export enum PropType {
 }
 export class Model {
     __props: { [index: string]: IProp };
-    constructor(data?: any) {
-        if (this.isPlainObject(data)) {
+    constructor(data?: any) {        
+        if (!this.isPlainObject(data)) {
             throw new Error('Data is not plain object');
         }
         for (var propName in this.__props) {
